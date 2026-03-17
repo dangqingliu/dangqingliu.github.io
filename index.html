@@ -36,6 +36,9 @@
             padding: 0;
             transition: background-color 0.4s ease, color 0.4s ease;
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         
         .lang-en, .lang-sc, .lang-tc { display: none; }
@@ -80,7 +83,8 @@
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(26px); background-color: #fdfcf7; }
 
-        .lang-switch-wrapper { top: 20px; right: 20px; }
+        /* 右上角下拉菜单样式 (默认隐藏，非Home页面显示) */
+        .lang-switch-wrapper { top: 20px; right: 20px; display: none; }
         .lang-select {
             padding: 8px 15px; border-radius: var(--radius-button); border: 1px solid var(--border);
             background-color: var(--panel-bg); color: var(--text); font-size: 0.9em; font-weight: 600;
@@ -104,18 +108,7 @@
         }
         .tab-btn:hover, .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
 
-        @media (max-width: 600px) {
-            .theme-switch-wrapper { top: 10px; left: 10px; }
-            .theme-switch { width: 50px; height: 28px; }
-            .slider:before { height: 20px; width: 20px; left: 4px; bottom: 4px; }
-            input:checked + .slider:before { transform: translateX(22px); }
-            .slider .icon { font-size: 12px; }
-            .lang-switch-wrapper { top: 10px; right: 10px; }
-            nav { padding-top: 60px; padding-bottom: 10px; } 
-            .tab-btn { margin: 0 5px; font-size: 1em; } 
-        }
-
-        main { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        main { flex: 1; max-width: 900px; width: 100%; margin: 40px auto; padding: 0 20px; box-sizing: border-box; }
         .tab-content { display: none; background: var(--panel-bg); padding: 30px; border-radius: var(--radius-panel); box-shadow: 0 2px 15px rgba(0,0,0,0.05); animation: fadeIn 0.4s; transition: background-color 0.4s ease; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -127,9 +120,9 @@
         }
         #home::after {
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.3); z-index: -1; transition: opacity 0.4s ease; 
+            background: rgba(0, 0, 0, 0.4); z-index: -1; transition: opacity 0.4s ease; 
         }
-        #home.bg-bright::after { opacity: 0.05; }
+        #home.bg-bright::after { opacity: 0.1; }
 
         .home-greeting { 
             font-size: 4em; color: white; margin-bottom: 15px; font-weight: 700; 
@@ -139,21 +132,51 @@
         body[data-lang="sc"] .home-greeting { font-family: 'Noto Serif SC', serif; }
         body[data-lang="tc"] .home-greeting { font-family: 'Noto Serif TC', serif; }
 
-        .home-subtitle { font-size: 1.2em; color: white; margin-bottom: 40px; text-shadow: 1px 1px 4px rgba(0,0,0,0.7); max-width: 700px; margin-left: auto; margin-right: auto;}
+        .home-subtitle { font-size: 1.2em; color: white; margin-bottom: 40px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); max-width: 700px; margin-left: auto; margin-right: auto;}
         
-        .lang-btn-group { display: flex; justify-content: center; gap: 20px; }
-        .lang-btn {
-            background: var(--primary); color: white; border: none; padding: 12px 30px;
-            border-radius: var(--radius-button); font-size: 1.1em; cursor: pointer; 
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        /* 首页下拉菜单与按钮样式 */
+        .home-action-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
-        .lang-btn:hover { background: #3a2366; transform: scale(1.1) translateY(-2px); box-shadow: 0 6px 15px rgba(75, 46, 131, 0.5); }
+
+        .home-lang-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .home-lang-select {
+            padding: 8px 15px; border-radius: var(--radius-button); border: 1px solid rgba(255,255,255,0.5);
+            background-color: rgba(0,0,0,0.3); color: white; font-size: 0.95em; font-weight: bold;
+            cursor: pointer; outline: none; transition: 0.3s;
+            appearance: none; -webkit-appearance: none; -moz-appearance: none;
+            text-align: center;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22white%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 10px top 50%;
+            background-size: 10px auto; padding-right: 30px;
+        }
+        .home-lang-select:hover { background-color: rgba(0,0,0,0.6); border-color: white; }
+        .home-lang-select option { color: #333; background: white; }
+
+        .more-btn {
+            background: transparent; color: white; border: 2px solid white; padding: 12px 35px;
+            border-radius: var(--radius-button); font-size: 1.1em; cursor: pointer; font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .more-btn:hover { 
+            background: white; color: var(--primary); text-shadow: none;
+            transform: scale(1.05) translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.4); 
+        }
 
         #about.tab-content { background: transparent; box-shadow: none; padding: 0; }
         .content-panel { background: var(--panel-bg); padding: 30px; border-radius: var(--radius-panel); box-shadow: 0 2px 15px rgba(0,0,0,0.05); transition: background-color 0.4s ease; }
-        .about-container { display: flex; gap: 30px; align-items: center; }
-        .profile-pic { width: 150px; height: 150px; border-radius: 50%; background-color: #ddd; background-image: url('photo.jpg'); background-size: cover; background-position: center; flex-shrink: 0; }
+        .about-container { display: flex; gap: 30px; align-items: flex-start; }
+        .profile-pic { width: 160px; height: 160px; border-radius: 12px; background-color: #ddd; background-image: url('photo.jpg'); background-size: cover; background-position: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .about-info h1 { margin-top: 0; color: var(--primary); }
         .about-link { color: var(--primary); font-weight: bold; text-decoration: none; }
         .about-link:hover { text-decoration: underline; }
@@ -187,6 +210,46 @@
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
         .modal-content { background: var(--panel-bg); padding: 30px; border-radius: var(--radius-panel); max-width: 600px; width: 90%; position: relative; transition: background-color 0.4s ease; color: var(--text); }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5em; cursor: pointer; color: #888; border: none; background: none;}
+        
+        /* 底部版权信息 */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #888;
+            font-size: 0.9em;
+            margin-top: auto;
+        }
+
+        /* --- 手机端防遮挡及深度排版优化 --- */
+        @media (max-width: 600px) {
+            .theme-switch-wrapper { top: 10px; left: 10px; }
+            .theme-switch { width: 50px; height: 28px; }
+            .slider:before { height: 20px; width: 20px; left: 4px; bottom: 4px; }
+            input:checked + .slider:before { transform: translateX(22px); }
+            .slider .icon { font-size: 12px; }
+            
+            .lang-switch-wrapper { top: 10px; right: 10px; }
+
+            nav { padding-top: 60px; padding-bottom: 10px; overflow-x: auto; white-space: nowrap; } 
+            .tab-btn { margin: 0 5px; font-size: 1em; } 
+
+            .home-greeting { font-size: 2.8em; }
+            .home-subtitle { font-size: 1em; }
+
+            /* About 页面手机端垂直居中排版 */
+            .about-container { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+            .profile-pic { width: 140px; height: 140px; }
+            .social-links { justify-content: center; }
+
+            /* CV 页面手机端排版，防止时间被挤压 */
+            .cv-item-header, .cv-item-subheader { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .cv-item-header span:last-child, .cv-item-subheader span:last-child { color: var(--primary); font-size: 0.9em; }
+            
+            .news-item { flex-direction: column; }
+            .news-date { margin-bottom: 5px; }
+            
+            .content-panel, .tab-content { padding: 20px; }
+        }
     </style>
 </head>
 <body data-lang="en">
@@ -201,11 +264,11 @@
     </label>
 </div>
 
-<div class="lang-switch-wrapper fixed-control">
-    <select id="langSelect" class="lang-select" onchange="setLanguage(this.value)">
-        <option value="en">English</option>
-        <option value="sc">简体中文</option>
-        <option value="tc">繁體中文</option>
+<div class="lang-switch-wrapper fixed-control" id="floatingLangWrapper">
+    <select id="floatingLangSelect" class="lang-select" onchange="setLanguage(this.value)">
+        <option value="en">🌐 English</option>
+        <option value="sc">🌐 简体中文</option>
+        <option value="tc">🌐 繁體中文</option>
     </select>
 </div>
 
@@ -231,19 +294,19 @@
             <div class="home-subtitle">致力於應用嵌入式技術與訊號處理，開發創新解決方案以應對現實世界的挑戰。</div>
         </div>
 
-        <div class="lang-btn-group">
-            <button class="lang-btn" 
+        <div class="home-action-group">
+<div class="home-lang-wrapper" style="position: relative;">
+    <span style="position: absolute; right: 100%; margin-right: 10px; font-size: 1.3em; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">🌐</span>
+    <select id="homeLangSelect" class="home-lang-select" onchange="setLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="sc">简体中文</option>
+                    <option value="tc">繁體中文</option>
+                </select>
+            </div>
+            <button class="more-btn" 
                     onmouseenter="document.getElementById('home').classList.add('bg-bright')" 
                     onmouseleave="document.getElementById('home').classList.remove('bg-bright')"
-                    onclick="setLanguageAndEnter('sc')">简体中文</button>
-            <button class="lang-btn" 
-                    onmouseenter="document.getElementById('home').classList.add('bg-bright')" 
-                    onmouseleave="document.getElementById('home').classList.remove('bg-bright')"
-                    onclick="setLanguageAndEnter('en')">English</button>
-            <button class="lang-btn" 
-                    onmouseenter="document.getElementById('home').classList.add('bg-bright')" 
-                    onmouseleave="document.getElementById('home').classList.remove('bg-bright')"
-                    onclick="setLanguageAndEnter('tc')">繁體中文</button>
+                    onclick="switchTab('about')">More of Me</button>
         </div>
     </section>
 
@@ -566,6 +629,10 @@
     </section>
 </main>
 
+<footer>
+    &copy; Copyright 2026 Dangqing Liu
+</footer>
+
 <div id="projectModal" class="modal">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">&times;</button>
@@ -575,6 +642,12 @@
 </div>
 
 <script>
+    const currentHour = new Date().getHours();
+    if (currentHour >= 19 || currentHour < 6) {
+        document.body.classList.add('dark-mode');
+        document.getElementById('checkbox').checked = true;
+    }
+
     window.addEventListener('scroll', function() {
         const controls = document.querySelectorAll('.fixed-control');
         if (window.scrollY > 30) {
@@ -604,26 +677,31 @@
         
         document.getElementById(tabId).classList.add('active');
         document.querySelector(`.tab-btn[data-target="${tabId}"]`).classList.add('active');
+
+        // 控制右上角悬浮语言菜单的显示与隐藏
+        const floatingLang = document.getElementById('floatingLangWrapper');
+        if (tabId === 'home') {
+            floatingLang.style.display = 'none';
+        } else {
+            floatingLang.style.display = 'block';
+        }
     }
 
-    function setLanguageAndEnter(lang) {
-        setLanguage(lang);
-        switchTab('about');
-    }
-
+    // 双向绑定语言选项：不论在哪里切换，两个下拉菜单的选项保持一致
     function setLanguage(lang) {
         document.body.setAttribute('data-lang', lang);
-        document.getElementById('langSelect').value = lang;
+        
+        const homeSelect = document.getElementById('homeLangSelect');
+        const floatingSelect = document.getElementById('floatingLangSelect');
+        
+        if (homeSelect) homeSelect.value = lang;
+        if (floatingSelect) floatingSelect.value = lang;
     }
 
-    // 增强版弹窗逻辑：分离文本和链接，安全渲染
     function openModal(title, description, linkUrl) {
         document.getElementById('modalTitle').innerText = title;
         
-        // 先放入基础描述文字
         let finalHtml = description;
-        
-        // 如果传入了链接参数，就自动在结尾加上漂亮的超链接
         if (linkUrl && linkUrl !== '') {
             finalHtml += `<br><br><a href="${linkUrl}" target="_blank" style="color: var(--primary); font-weight: bold; text-decoration: none; display: inline-block; margin-top: 5px;">🔗 View on GitHub</a>`;
         }
